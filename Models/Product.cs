@@ -15,9 +15,10 @@ namespace SmartInventory.Models
         public decimal Price { get; set; }
         
         //自動計算總合，移除set，外部不能修改
-        public decimal TotalValue 
+        public decimal TotalValue => Quantity * Price;
+        public override string ToString()
         {
-            get { return Quantity * Price; }
-        } 
+            return $"ID:{Id} Name:{Name} Price{Price} Quantity:{Quantity} TotalValue{TotalValue}";
+        }
     }
 }

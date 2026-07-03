@@ -1,3 +1,6 @@
+using SmartInventory.Data;
+using System.Diagnostics;
+
 namespace SmartInventory
 {
     public partial class MainForm : Form
@@ -13,13 +16,20 @@ namespace SmartInventory
         {
             InitializeComponent();
 
+            DbHelper.InitDb();
             Product p = new Product();
-            p.Id = 1;
-            p.Name = "45W充電器";
-            //M=>decimal
-            p.Price = 599.5M;
-            p.Quantity = 20;
-            Console.WriteLine(p);
+            p.Name = "藍芽耳機1";
+            p.Category = "3C";
+            p.Quantity = 5;
+            p.Price = 100;
+
+            DbHelper.InsertProduct(new Product()
+            {
+                Name = "藍芽耳機2",
+                Category = "3C",
+                Quantity = 10,
+                Price = 699.8M
+            });
 
             // TODO（13-1）：啟動就讀資料庫
             //   DbHelper.InitDb();
