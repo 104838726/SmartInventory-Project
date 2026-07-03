@@ -13,6 +13,14 @@ namespace SmartInventory
         {
             InitializeComponent();
 
+            Product p = new Product();
+            p.Id = 1;
+            p.Name = "45W充電器";
+            //M=>decimal
+            p.Price = 599.5M;
+            p.Quantity = 20;
+            Console.WriteLine(p);
+
             // TODO（13-1）：啟動就讀資料庫
             //   DbHelper.InitDb();
             //   all = DbHelper.GetAllProducts();
