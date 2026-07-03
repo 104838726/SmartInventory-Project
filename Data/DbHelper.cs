@@ -34,7 +34,7 @@ namespace SmartInventory.Data
             using (var conn = new SqliteConnection(connStr))
             {
                 conn.Open();
-                string sql = " select * from item";
+                string sql = " select * from Products";
 
 
                 using (var cmd = new SqliteCommand(sql, conn))
@@ -43,14 +43,15 @@ namespace SmartInventory.Data
                     {
                         while (reader.Read())
                         {
-                            var item = new Product();
+                            var p = new Product();
                             //CTRL+K+C //CTRL+K+U
-                            //item.Id = Convert.ToInt32(reader["id"]);
-                            //item.Date = Convert.ToDateTime(reader["date"]);
-                            //item.Note = reader["note"].ToString()!;
-                            //item.CategoryType = (Category)Enum.Parse(typeof(Category), reader["category"].ToString()!);
-                            //item.IsIncome = Convert.ToInt32(reader["isincome"]) == 1;
-                            result.Add(item);
+                            p.Id = Convert.ToInt32(reader["Id"]);
+                            p.Name = reader["Name"].ToString()!;
+                            p.Category = reader["Category"].ToString()!;
+                            p.Quantity = Convert.ToInt32(reader["Quantity"]);
+                            p.Price = Convert.ToDecimal(reader["amount"]);
+                            
+                            result.Add(p);
                         }
                     }
                 }

@@ -1,4 +1,6 @@
 using SmartInventory.Data;
+using SmartInventory.Models;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace SmartInventory
@@ -10,26 +12,26 @@ namespace SmartInventory
         //   btnAdd/btnUpdate/btnDelete、btnCheck、lblTotal
         //
         // TODO（13-1）：宣告全部商品清單
-        //   private List<Product> all = new List<Product>();
+        private List<Product> all = new List<Product>();
+
+        //綁定畫面用
+        private BindingList<Product> view = new BindingList<Product>();
 
         public MainForm()
         {
             InitializeComponent();
+            dgv.DataSource = view;
+
+
 
             DbHelper.InitDb();
-            Product p = new Product();
-            p.Name = "藍芽耳機1";
-            p.Category = "3C";
-            p.Quantity = 5;
-            p.Price = 100;
-
-            DbHelper.InsertProduct(new Product()
+            all = DbHelper.GetAllProducts();
+            foreach(var p in all)
             {
-                Name = "藍芽耳機2",
-                Category = "3C",
-                Quantity = 10,
-                Price = 699.8M
-            });
+                Debug.WriteLine(p);
+            }
+
+            
 
             // TODO（13-1）：啟動就讀資料庫
             //   DbHelper.InitDb();
