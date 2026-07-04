@@ -70,7 +70,7 @@ namespace SmartInventory.Data
                 conn.Open();
                 string sql = """
                     insert into Products(Name,Category,Quantity,Price) values
-                    (@(Name,@Category,@Quantity,@Price);
+                    (@Name,@Category,@Quantity,@Price);
                     """;
                 using (var cmd = new SqliteCommand(sql, conn))
                 {
@@ -86,6 +86,41 @@ namespace SmartInventory.Data
 
             }
 
+        }
+
+
+        public static List<Product> GetAllProducts()
+        {
+            var result = new List<Product>();
+
+            using (var conn = new SqliteConnection(connStr))
+            {
+                conn.Open();
+                string sql = "select * from Products";
+
+                using (var cmd = new SqliteCommand(sql, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var p = new Product();
+
+                            // CTRL+K+C CTRL+K+U
+                            p.Id = Convert.ToInt32(reader["Id"]);
+                            p.Name = reader["Name"].ToString()!;
+                            p.Category = reader["Category"].ToString()!;
+                            p.Quantity = Convert.ToInt32(reader["Quantity"]);
+                            p.Price = Convert.ToDecimal(reader["Price"]);
+
+                            result.Add(p);
+                        }
+                    }
+                }
+            }
+
+
+            return result;
         }
         //刪除
         public static void DeleteItem(Product p)

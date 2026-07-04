@@ -21,17 +21,19 @@ namespace SmartInventory
         {
             InitializeComponent();
             dgv.DataSource = view;
-
+            dgv.AllowUserToAddRows = false;
+            dgv.AllowUserToDeleteRows = false;
+            dgv.MultiSelect = false;
 
 
             DbHelper.InitDb();
             all = DbHelper.GetAllProducts();
-            foreach(var p in all)
+            foreach (var p in all)
             {
                 Debug.WriteLine(p);
             }
+            RefreshView();
 
-            
 
             // TODO（13-1）：啟動就讀資料庫
             //   DbHelper.InitDb();
@@ -47,6 +49,54 @@ namespace SmartInventory
             //   var btnChart = new Button { Text = "統計圖表", AutoSize = true };
             //   btnChart.Click += (_, _) => new ChartForm(all).ShowDialog();
             //   flowLayoutPanel1.Controls.Add(btnChart);
+        }
+
+        public void RefreshView()
+        {
+            view.Clear();
+            foreach (var p in all)
+            {
+                view.Add(p);
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (ReadInput(out Product p))
+            {
+                //插入資料庫
+                DbHelper.InsertProduct(p);
+                all = DbHelper.GetAllProducts();
+                //更新畫面
+                RefreshView();
+            }
+        }
+
+        private bool ReadInput(out Product product)
+        {
+            product = new Product();
+            if (txtName.Text.Trim() == "" || txtCategory.Text.Trim() == "")
+            {
+                MessageBox.Show("商品名稱或分類不能為空");
+                return false;
+            }
+
+            if (!int.TryParse(txtQuantity.Text, out int q) || q <= 0)
+            {
+                MessageBox.Show("數量輸入不正確");
+                return false;
+            }
+            return true;
+            if (!decimal.TryParse(txtPrice.Text, out decimal p) || p <= 0)
+            {
+                MessageBox.Show("金額輸入不正確");
+                return false;
+            }
+            product.Name = txtName.Text;
+            product.Category = txtCategory.Text;
+            product.Quantity = q;
+            product.Price = p;
+            return true;
         }
 
         // ───── 以下方法 13-2 才會寫（按鈕事件可在 Designer 雙擊自動產生）─────
